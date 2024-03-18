@@ -10,7 +10,7 @@ class Display:
         self._display: Optional[Surface] = None
 
     @property
-    def display(self):
+    def display(self) -> Surface:
         return self._display
 
     def __enter__(self):
