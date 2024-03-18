@@ -10,6 +10,8 @@ grid_size = (32, 32)
 horizontal_border = (16, 16)
 vertical_border = (100, 16)
 
+cell_image = pygame.image.load("images/grid.png")
+
 
 def game_loop():
     done = False
@@ -32,9 +34,20 @@ def update_display_color(game_display: Surface):
     pygame.display.update()
 
 
+def add_buttons_to_display(game_display: Surface):
+    for index in range(0, game_size[0] * game_size[1]):
+        row = int(index / game_size[1])
+        col = index % game_size[1]
+        rect = pygame.Rect(horizontal_border[0] + col * grid_size[0], vertical_border[0] + row * grid_size[1],
+                           grid_size[0], grid_size[1])
+        game_display.blit(cell_image, rect)
+    pygame.display.update()
+
+
 def main():
     game_display = create_display()
     update_display_color(game_display)
+    add_buttons_to_display(game_display)
     game_loop()
 
 
