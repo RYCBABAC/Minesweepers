@@ -5,6 +5,9 @@ import pygame
 from pygame import Surface
 from pygame.rect import RectType
 
+import constants
+from display import Display
+
 bg_color = (192, 192, 192)
 grid_color = (128, 128, 128)
 
@@ -41,19 +44,6 @@ def game_loop(game_display: Surface, cells: List[Cell]):
                         cell.is_revealed = not cell.is_revealed
 
 
-def create_display() -> Surface:
-    pygame.init()
-
-    display_size = (grid_size[0] * game_size[0] + horizontal_border[0] + horizontal_border[1],
-                    grid_size[1] * game_size[1] + vertical_border[0] + vertical_border[1])
-    return pygame.display.set_mode(display_size)
-
-
-def update_display_color(game_display: Surface):
-    game_display.fill(bg_color)
-    pygame.display.update()
-
-
 def add_buttons_to_display(game_display: Surface) -> List[Cell]:
     cells = []
     for index in range(0, game_size[0] * game_size[1]):
@@ -68,10 +58,10 @@ def add_buttons_to_display(game_display: Surface) -> List[Cell]:
 
 
 def main():
-    game_display = create_display()
-    update_display_color(game_display)
-    cells = add_buttons_to_display(game_display)
-    game_loop(game_display, cells)
+    with Display(constants.DISPLAY_SIZE) as display:
+        display.set_background_color(constants.BACKGROUND_COLOR)
+        cells = add_buttons_to_display(display.display)
+        game_loop(display.display, cells)
 
 
 if __name__ == "__main__":

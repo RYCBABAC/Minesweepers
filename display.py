@@ -16,6 +16,11 @@ class Display:
     def __enter__(self):
         pygame.init()
         self._display = pygame.display.set_mode(self.size)
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pygame.quit()
+
+    def set_background_color(self, background_color: Tuple[int, int]):
+        self.display.fill(background_color)
+        pygame.display.update()
