@@ -6,6 +6,10 @@ from pygame import Surface
 from pygame.rect import RectType
 
 import constants
+from board_creator import BoardCreator
+from cell import Cell
+from cell_image_mapper import CellImageMapper
+from cell_value import CellValue
 from display import Display
 
 bg_color = (192, 192, 192)
@@ -19,13 +23,6 @@ vertical_border = (100, 16)
 
 cell_image = pygame.image.load("images/grid.png")
 mine_image = pygame.image.load("images/mine.png")
-
-
-@dataclasses.dataclass
-class Cell:
-    index: int
-    rect: RectType
-    is_revealed: bool
 
 
 def game_loop(game_display: Surface, cells: List[Cell]):
@@ -44,24 +41,15 @@ def game_loop(game_display: Surface, cells: List[Cell]):
                         cell.is_revealed = not cell.is_revealed
 
 
-def add_buttons_to_display(game_display: Surface) -> List[Cell]:
-    cells = []
-    for index in range(0, game_size[0] * game_size[1]):
-        row = int(index / game_size[1])
-        col = index % game_size[1]
-        rect = pygame.Rect(horizontal_border[0] + col * grid_size[0], vertical_border[0] + row * grid_size[1],
-                           grid_size[0], grid_size[1])
-        game_display.blit(cell_image, rect)
-        cells.append(Cell(index, rect, False))
-    pygame.display.update()
-    return cells
-
-
 def main():
-    with Display(constants.DISPLAY_SIZE) as display:
-        display.set_background_color(constants.BACKGROUND_COLOR)
-        cells = add_buttons_to_display(display.display)
-        game_loop(display.display, cells)
+    with CellImageMapper(constants.BASE_IMAGES_PATH) as cell_image_mapper:
+        with Display(constants.DISPLAY_SIZE, cell_image_mapper) as display:
+            display.set_background_color(constants.BACKGROUND_COLOR)
+            board_creator = BoardCreator(constants.BOARD_SIZE, constants.HORIZONTAL_BORDER_SIZE,
+                                         constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE)
+            cells = board_creator.create_board()
+            display.update_cells(cells)
+            game_loop(display.display, cells)
 
 
 if __name__ == "__main__":

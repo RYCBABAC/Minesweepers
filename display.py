@@ -1,12 +1,16 @@
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 
 import pygame
 from pygame import Surface
 
+from cell import Cell
+from cell_image_mapper import CellImageMapper
+
 
 class Display:
-    def __init__(self, size: Tuple[int, int]):
+    def __init__(self, size: Tuple[int, int], cell_image_mapper: CellImageMapper):
         self.size = size
+        self.cell_image_mapper = cell_image_mapper
         self._display: Optional[Surface] = None
 
     @property
@@ -23,4 +27,10 @@ class Display:
 
     def set_background_color(self, background_color: Tuple[int, int]):
         self.display.fill(background_color)
+        pygame.display.update()
+
+    def update_cells(self, cells: List[Cell]) -> None:
+        for cell in cells:
+            image = self.cell_image_mapper[cell.image]
+            self.display.blit(image, cell.rect)
         pygame.display.update()
