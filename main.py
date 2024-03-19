@@ -11,6 +11,7 @@ from cell import Cell
 from cell_image_mapper import CellImageMapper
 from cell_value import CellValue
 from display import Display
+from game_runner import GameRunner
 from game_state_manager import GameStateManager
 from game_state import GameState
 
@@ -27,13 +28,6 @@ cell_image = pygame.image.load("images/grid.png")
 mine_image = pygame.image.load("images/mine.png")
 
 
-def run_game(game_loop: GameStateManager):
-    done = False
-    while not done:
-        game_states = game_loop.get_game_state()
-        done = GameState.QUIT in game_states
-
-
 def main():
     with CellImageMapper(constants.BASE_IMAGES_PATH) as cell_image_mapper:
         with Display(constants.DISPLAY_SIZE, cell_image_mapper) as display:
@@ -43,7 +37,8 @@ def main():
             board = board_creator.create_board()
             display.update_cells(board)
             with GameStateManager(board, display) as game_state_manager:
-                run_game(game_state_manager)
+                game_runner = GameRunner(game_state_manager)
+                game_runner.run_game()
 
 
 if __name__ == "__main__":
