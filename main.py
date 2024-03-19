@@ -11,6 +11,8 @@ from cell import Cell
 from cell_image_mapper import CellImageMapper
 from cell_value import CellValue
 from display import Display
+from game_state_manager import GameStateManager
+from game_state import GameState
 
 bg_color = (192, 192, 192)
 grid_color = (128, 128, 128)
@@ -25,20 +27,11 @@ cell_image = pygame.image.load("images/grid.png")
 mine_image = pygame.image.load("images/mine.png")
 
 
-def game_loop(game_display: Surface, cells: List[Cell]):
+def run_game(game_loop: GameStateManager):
     done = False
     while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-            elif event.type == pygame.MOUSEBUTTONUP:
-                clicked_pos = event.pos
-                for cell in cells:
-                    if cell.rect.collidepoint(clicked_pos):
-                        new_image = cell_image if cell.is_revealed else mine_image
-                        game_display.blit(new_image, cell.rect)
-                        pygame.display.update()
-                        cell.is_revealed = not cell.is_revealed
+        game_states = game_loop.get_game_state()
+        done = GameState.QUIT in game_states
 
 
 def main():
@@ -47,9 +40,10 @@ def main():
             display.set_background_color(constants.BACKGROUND_COLOR)
             board_creator = BoardCreator(constants.BOARD_SIZE, constants.HORIZONTAL_BORDER_SIZE,
                                          constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE)
-            cells = board_creator.create_board()
-            display.update_cells(cells)
-            game_loop(display.display, cells)
+            board = board_creator.create_board()
+            display.update_cells(board)
+            with GameStateManager(board, display) as game_state_manager:
+                run_game(game_state_manager)
 
 
 if __name__ == "__main__":
