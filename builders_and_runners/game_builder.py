@@ -23,7 +23,7 @@ class GameBuilder:
     @staticmethod
     def build_board() -> List[Cell]:
         board_creator = BoardCreator(constants.BOARD_SIZE, constants.HORIZONTAL_BORDER_SIZE,
-                                     constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE)
+                                     constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE, constants.NUM_OF_MINES)
         return board_creator.create_board()
 
     @staticmethod

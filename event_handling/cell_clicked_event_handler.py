@@ -4,6 +4,7 @@ from pygame.event import Event
 
 from entities.cell import Cell
 from entities.cell_image import CellImage
+from entities.cell_value import CellValue
 from entities.game_state import GameState
 from event_handling.ievent_handler import IEventHandler
 from user_interface.display import Display
@@ -30,7 +31,12 @@ class CellClickedEventHandler(IEventHandler):
                 return cell
         return None
 
-    def update_cell(self, cell: Cell) -> None:
-        cell.image = CellImage.CELL if cell.is_revealed else CellImage.MINE
+    @staticmethod
+    def update_cell(cell: Cell) -> None:
+        if cell.is_revealed:
+            cell.image = CellImage.CELL
+        elif cell.value == CellValue.MINE:
+            cell.image = CellImage.MINE
+        else:
+            cell.image = CellImage.EMPTY
         cell.is_revealed = not cell.is_revealed
-
