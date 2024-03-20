@@ -6,21 +6,24 @@ import pygame
 from entities.cell import Cell
 from entities.cell_image import CellImage
 from entities.cell_value import CellValue
+from game_logic.neighbors_accessor import NeighborsAccessor
 
 
 class BoardCreator:
-    def __init__(self, game_size, horizontal_boarder_size: Tuple[int, int],
-                 vertical_boarder_size: Tuple[int, int], cell_size: Tuple[int, int], num_of_mines: int):
+    def __init__(self, game_size, horizontal_boarder_size: Tuple[int, int], vertical_boarder_size: Tuple[int, int],
+                 cell_size: Tuple[int, int], num_of_mines: int, neighbors_accessor: NeighborsAccessor):
         self.game_size = game_size
         self.horizontal_border_size = horizontal_boarder_size
         self.vertical_border_size = vertical_boarder_size
         self.cell_size = cell_size
         self.num_of_mines = num_of_mines
+        self.neighbors_accessor = neighbors_accessor
 
     def create_board(self) -> List[Cell]:
         board_size = self.game_size[0] * self.game_size[1]
         board = [self.create_cell(index) for index in range(0, board_size)]
         mines = self.create_mines(board)
+        self.set_cells_values(board, mines)
         return board
 
     def create_cell(self, index) -> Cell:
@@ -41,3 +44,14 @@ class BoardCreator:
         for mine in mines:
             mine.value = CellValue.MINE
         return mines
+
+    def set_cells_values(self, board: List[Cell], mines: List[Cell]):
+        for mine in mines:
+            neighbors = self.neighbors_accessor.get_neighbors(mine, board)
+            for neighbor in neighbors:
+                if neighbor.value == CellValue.EMPTY:
+                    neighbor.value = self.get_cell_value(neighbor, board)
+
+    def get_cell_value(self, cell: Cell, board: List[Cell]) -> CellValue:
+        return CellValue(sum(neighbor.value == CellValue.MINE
+                          for neighbor in self.neighbors_accessor.get_neighbors(cell, board)))

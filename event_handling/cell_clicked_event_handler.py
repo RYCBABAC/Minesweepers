@@ -37,6 +37,8 @@ class CellClickedEventHandler(IEventHandler):
             cell.image = CellImage.CELL
         elif cell.value == CellValue.MINE:
             cell.image = CellImage.MINE
-        else:
+        elif cell.value == CellValue.EMPTY:
             cell.image = CellImage.EMPTY
+        else:
+            cell.image = CellImage(f"grid{cell.value.value}")
         cell.is_revealed = not cell.is_revealed

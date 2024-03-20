@@ -8,6 +8,7 @@ from entities import constants
 
 from event_handling.game_state_manager import GameStateManager
 from game_logic.board_creator import BoardCreator
+from game_logic.neighbors_accessor import NeighborsAccessor
 from user_interface.cell_image_mapper import CellImageMapper
 from user_interface.display import Display
 
@@ -22,8 +23,10 @@ class GameBuilder:
 
     @staticmethod
     def build_board() -> List[Cell]:
+        neighbors_accessor = NeighborsAccessor(constants.BOARD_SIZE)
         board_creator = BoardCreator(constants.BOARD_SIZE, constants.HORIZONTAL_BORDER_SIZE,
-                                     constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE, constants.NUM_OF_MINES)
+                                     constants.VERTICAL_BORDER_SIZE, constants.CELL_SIZE, constants.NUM_OF_MINES,
+                                     neighbors_accessor)
         return board_creator.create_board()
 
     @staticmethod
