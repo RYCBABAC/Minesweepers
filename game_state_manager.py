@@ -18,12 +18,6 @@ class GameStateManager:
             pygame.MOUSEBUTTONUP: CellClickedEventHandler(self.board, self.display)
         }
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.event_handlers = {}
-
     def get_game_state(self) -> List[GameState]:
         return [self.event_handlers[event.type].handle_event(event) for event in pygame.event.get() if
                 event.type in self.event_handlers]
