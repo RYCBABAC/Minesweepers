@@ -1,9 +1,9 @@
 from typing import List
 
-import constants
-from cell import Cell
-from display import Display
-from game_loop import GameLoop
+from builders_and_runners.game_loop import GameLoop
+from entities import constants
+from entities.cell import Cell
+from user_interface.display import Display
 
 
 class GameRunner:

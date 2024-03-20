@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pygame.event import Event
 
-from game_state import GameState
+from entities.game_state import GameState
 
 
 class IEventHandler(ABC):

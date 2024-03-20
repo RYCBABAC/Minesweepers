@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from pygame.rect import RectType
 
-from cell_image import CellImage
-from cell_value import CellValue
+from entities.cell_image import CellImage
+from entities.cell_value import CellValue
 
 
 @dataclass

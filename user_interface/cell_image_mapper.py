@@ -3,7 +3,7 @@ import os.path
 import pygame
 from pygame import Surface
 
-from cell_image import CellImage
+from entities.cell_image import CellImage
 
 
 class CellImageMapper:

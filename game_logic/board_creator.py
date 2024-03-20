@@ -2,9 +2,9 @@ from typing import Tuple, List
 
 import pygame
 
-from cell import Cell
-from cell_image import CellImage
-from cell_value import CellValue
+from entities.cell import Cell
+from entities.cell_image import CellImage
+from entities.cell_value import CellValue
 
 
 class BoardCreator:
@@ -22,7 +22,8 @@ class BoardCreator:
     def create_cell(self, index) -> Cell:
         cell_position = self.get_cell_position(index)
         rect = pygame.Rect(cell_position, self.cell_size)
-        return Cell(index=index, value=CellValue.EMPTY, image=CellImage.CELL, is_revealed=False, is_flagged=False, rect=rect)
+        return Cell(index=index, value=CellValue.EMPTY, image=CellImage.CELL,
+                    is_revealed=False, is_flagged=False, rect=rect)
 
     def get_cell_position(self, index: int) -> Tuple[int, int]:
         row = int(index / self.game_size[1])

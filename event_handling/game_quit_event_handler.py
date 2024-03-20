@@ -1,7 +1,7 @@
 from pygame.event import Event
 
-from game_state import GameState
-from ievent_handler import IEventHandler
+from entities.game_state import GameState
+from event_handling.ievent_handler import IEventHandler
 
 
 class GameQuitEventHandler(IEventHandler):

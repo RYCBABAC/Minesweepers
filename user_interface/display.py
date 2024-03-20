@@ -3,8 +3,8 @@ from typing import Tuple, Optional, List
 import pygame
 from pygame import Surface
 
-from cell import Cell
-from cell_image_mapper import CellImageMapper
+from entities.cell import Cell
+from user_interface.cell_image_mapper import CellImageMapper
 
 
 class Display:

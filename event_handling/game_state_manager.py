@@ -2,11 +2,11 @@ from typing import List
 
 import pygame
 
-from cell import Cell
-from cell_clicked_event_handler import CellClickedEventHandler
-from display import Display
-from game_quit_event_handler import GameQuitEventHandler
-from game_state import GameState
+from entities.cell import Cell
+from entities.game_state import GameState
+from event_handling.cell_clicked_event_handler import CellClickedEventHandler
+from event_handling.game_quit_event_handler import GameQuitEventHandler
+from user_interface.display import Display
 
 
 class GameStateManager:

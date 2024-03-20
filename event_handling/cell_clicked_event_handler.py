@@ -2,11 +2,11 @@ from typing import List, Tuple, Optional
 
 from pygame.event import Event
 
-from cell import Cell
-from cell_image import CellImage
-from display import Display
-from game_state import GameState
-from ievent_handler import IEventHandler
+from entities.cell import Cell
+from entities.cell_image import CellImage
+from entities.game_state import GameState
+from event_handling.ievent_handler import IEventHandler
+from user_interface.display import Display
 
 
 class CellClickedEventHandler(IEventHandler):

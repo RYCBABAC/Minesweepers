@@ -1,13 +1,15 @@
 from typing import List
 
-import constants
-from board_creator import BoardCreator
-from cell import Cell
-from cell_image_mapper import CellImageMapper
-from display import Display
-from game_loop import GameLoop
-from game_runner import GameRunner
-from game_state_manager import GameStateManager
+from builders_and_runners.game_loop import GameLoop
+from builders_and_runners.game_runner import GameRunner
+from entities.cell import Cell
+
+from entities import constants
+
+from event_handling.game_state_manager import GameStateManager
+from game_logic.board_creator import BoardCreator
+from user_interface.cell_image_mapper import CellImageMapper
+from user_interface.display import Display
 
 
 class GameBuilder:

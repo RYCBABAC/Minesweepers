@@ -1,5 +1,5 @@
-from game_state import GameState
-from game_state_manager import GameStateManager
+from entities.game_state import GameState
+from event_handling.game_state_manager import GameStateManager
 
 
 class GameLoop:
