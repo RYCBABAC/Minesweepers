@@ -21,7 +21,7 @@ class CellClickedEventHandler(IEventHandler):
         if cell is None:
             return GameState.ONGOING
 
-        self.update_cell(cell)
+        CellClickedEventHandler.update_cell(event, cell)
         self.display.update_cells([cell])
         return GameState.ONGOING
 
@@ -32,9 +32,16 @@ class CellClickedEventHandler(IEventHandler):
         return None
 
     @staticmethod
-    def update_cell(cell: Cell) -> None:
+    def update_cell(event: Event, cell: Cell) -> None:
+        if event.button == 1 and not cell.is_flagged:  # Left click
+            CellClickedEventHandler.reveal_cell(cell)
+        elif event.button == 3:  # Right click
+            CellClickedEventHandler.flag_cell(cell)
+
+    @staticmethod
+    def reveal_cell(cell: Cell) -> None:
         if cell.is_revealed:
-            cell.image = CellImage.CELL
+            return
         elif cell.value == CellValue.MINE:
             cell.image = CellImage.MINE
         elif cell.value == CellValue.EMPTY:
@@ -42,3 +49,8 @@ class CellClickedEventHandler(IEventHandler):
         else:
             cell.image = CellImage(f"grid{cell.value.value}")
         cell.is_revealed = not cell.is_revealed
+
+    @staticmethod
+    def flag_cell(cell: Cell) -> None:
+        cell.is_flagged = not cell.is_flagged
+        cell.image = CellImage.FLAG if cell.is_flagged else CellImage.CELL
