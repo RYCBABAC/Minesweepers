@@ -5,15 +5,17 @@ from pygame.event import Event
 from entities.cell import Cell
 from entities.game_state import GameState
 from entities.update_type import CellUpdateType
+from game_logic.auto_revealer import AutoRevealer
 from game_logic.cell_updater import CellUpdater
 from event_handling.ievent_handler import IEventHandler
 from user_interface.display import Display
 
 
 class CellClickedEventHandler(IEventHandler):
-    def __init__(self, board: List[Cell], display: Display):
+    def __init__(self, board: List[Cell], display: Display, auto_revealer: AutoRevealer):
         self.board = board
         self.display = display
+        self.auto_revealer = auto_revealer
 
     def handle_event(self, event: Event) -> GameState:
         clicked_pos = event.pos
@@ -23,7 +25,10 @@ class CellClickedEventHandler(IEventHandler):
 
         update_type = CellUpdateType(event.button)
         CellUpdater.update_cell(cell, update_type)
-        self.display.update_cells([cell])
+        cells_to_reveal = [cell]
+        if update_type == CellUpdateType.REVEAL:
+            cells_to_reveal += self.auto_revealer.reveal(cell, self.board)
+        self.display.update_cells(cells_to_reveal)
         return GameState.ONGOING
 
     def get_clicked_cell(self, clicked_pos: Tuple[int, int]) -> Optional[Cell]:

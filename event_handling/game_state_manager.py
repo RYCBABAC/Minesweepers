@@ -10,12 +10,11 @@ from user_interface.display import Display
 
 
 class GameStateManager:
-    def __init__(self, board: List[Cell], display: Display):
-        self.board = board
-        self.display = display
+    def __init__(self, game_quit_event_handler: GameQuitEventHandler,
+                 cell_clicked_event_handler: CellClickedEventHandler):
         self.event_handlers = {
-            pygame.QUIT: GameQuitEventHandler(),
-            pygame.MOUSEBUTTONUP: CellClickedEventHandler(self.board, self.display)
+            pygame.QUIT: game_quit_event_handler,
+            pygame.MOUSEBUTTONUP: cell_clicked_event_handler
         }
 
     def get_game_state(self) -> List[GameState]:
