@@ -9,6 +9,8 @@ class CellUpdater:
     def update_cell(cell: Cell, update_type: CellUpdateType) -> None:
         if update_type == CellUpdateType.REVEAL:
             CellUpdater.reveal_cell(cell)
+        elif update_type == CellUpdateType.LOST_REVEAL:
+            CellUpdater.lost_reveal_cell(cell)
         elif update_type == CellUpdateType.FLAG:
             CellUpdater.flag_cell(cell)
 
@@ -18,6 +20,20 @@ class CellUpdater:
             return
         elif cell.value == CellValue.MINE:
             cell.image = CellImage.MINE
+        elif cell.value == CellValue.EMPTY:
+            cell.image = CellImage.EMPTY
+        else:
+            cell.image = CellImage(f"grid{cell.value.value}")
+        cell.is_revealed = not cell.is_revealed
+
+    @staticmethod
+    def lost_reveal_cell(cell: Cell) -> None:
+        if cell.is_revealed and cell.value == CellValue.MINE:
+            cell.image = CellImage.MINE_CLICKED
+        elif cell.value == CellValue.MINE:
+            cell.image = CellImage.MINE
+        elif cell.is_flagged:
+            cell.image = CellImage.MINE_FALSE
         elif cell.value == CellValue.EMPTY:
             cell.image = CellImage.EMPTY
         else:
