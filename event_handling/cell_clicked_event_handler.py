@@ -3,11 +3,9 @@ from typing import List, Tuple, Optional
 from pygame.event import Event
 
 from entities.cell import Cell
-from entities.cell_image import CellImage
-from entities.cell_value import CellValue
 from entities.game_state import GameState
 from entities.update_type import CellUpdateType
-from event_handling.cell_updater import CellUpdater
+from game_logic.cell_updater import CellUpdater
 from event_handling.ievent_handler import IEventHandler
 from user_interface.display import Display
 
