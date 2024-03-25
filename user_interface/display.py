@@ -13,7 +13,6 @@ class Display:
         self.size = size
         self.cell_image_mapper = cell_image_mapper
         self._display: Optional[Surface] = None
-        self._timer: Clock = pygame.time.Clock()
 
     @property
     def display(self) -> Surface:
