@@ -15,7 +15,7 @@ class NeighborsAccessor:
     def get_neighbors_indices(self, index: int):
         cols = self.game_size[0]
         rows = self.game_size[1]
-        r = int(index / cols)
+        r = index // cols
         c = index % cols
         return [(r - i) * cols + c - j for i in range(-1, 2) for j in range(-1, 2)
                 if 0 <= r - i < rows and 0 <= c - j < cols and (r - i) * cols + c - j != 0]

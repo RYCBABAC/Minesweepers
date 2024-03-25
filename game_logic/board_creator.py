@@ -33,7 +33,7 @@ class BoardCreator:
                     is_revealed=False, is_flagged=False, rect=rect)
 
     def get_cell_position(self, index: int) -> Tuple[int, int]:
-        row = int(index / self.game_size[1])
+        row = index // self.game_size[1]
         col = index % self.game_size[1]
         cell_x_pos = self.horizontal_border_size[0] + col * self.cell_size[0]
         cell_y_pos = self.vertical_border_size[0] + row * self.cell_size[1]

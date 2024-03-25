@@ -2,6 +2,7 @@ from typing import Tuple, Optional, List
 
 import pygame
 from pygame import Surface
+from pygame.time import Clock
 
 from entities.cell import Cell
 from user_interface.cell_image_mapper import CellImageMapper
@@ -12,6 +13,7 @@ class Display:
         self.size = size
         self.cell_image_mapper = cell_image_mapper
         self._display: Optional[Surface] = None
+        self._timer: Clock = pygame.time.Clock()
 
     @property
     def display(self) -> Surface:
