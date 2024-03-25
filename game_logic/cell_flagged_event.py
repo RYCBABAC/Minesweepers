@@ -12,7 +12,7 @@ class CellFlaggedEvent:
         self.game_state_manager = game_state_manager
 
     def handle_cell_flagged_event(self, cell: Cell) -> None:
-        if self.game_state_manager.game_state != GameState.ONGOING:
+        if self.game_state_manager.game_state != GameState.ONGOING or cell.is_revealed:
             return
 
         CellUpdater.update_cell(cell, CellUpdateType.FLAG)
