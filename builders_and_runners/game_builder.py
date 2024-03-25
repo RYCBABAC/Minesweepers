@@ -5,12 +5,15 @@ from builders_and_runners.game_runner import GameRunner
 from entities.cell import Cell
 
 from entities import constants
-from event_handling.cell_clicked_event_handler import CellClickedEventHandler
+from event_handling.button_clicked_event_handler import ButtonClickedEventHandler
 from event_handling.game_quit_event_handler import GameQuitEventHandler
 
-from event_handling.game_state_manager import GameStateManager
+from event_handling.event_manager import EventManager
 from game_logic.auto_revealer import AutoRevealer
 from game_logic.board_creator import BoardCreator
+from game_logic.cell_clicked_event import CellClickedEvent
+from game_logic.cell_flagged_event import CellFlaggedEvent
+from game_logic.game_state_manager import GameStateManager
 from game_logic.neighbors_accessor import NeighborsAccessor
 from user_interface.cell_image_mapper import CellImageMapper
 from user_interface.display import Display
@@ -22,8 +25,9 @@ class GameBuilder:
         self.display: Optional[Display] = None
         self.game_loop: Optional[GameLoop] = None
         self.neighbors_accessor: Optional[NeighborsAccessor] = None
-        self.game_state_manager: Optional[GameStateManager] = None
+        self.event_manager: Optional[EventManager] = None
         self.auto_revealer: Optional[AutoRevealer] = None
+        self.game_state_manager: Optional[GameStateManager] = None
 
     def build_game(self) -> GameRunner:
         self.build_neighbors_accessor()
@@ -31,6 +35,7 @@ class GameBuilder:
         self.build_display()
         self.build_auto_revealer()
         self.build_game_state_manager()
+        self.build_event_manager()
         self.build_game_loop()
         return GameRunner(self.board, self.display, self.game_loop)
 
@@ -49,9 +54,13 @@ class GameBuilder:
         self.auto_revealer = AutoRevealer(self.neighbors_accessor)
 
     def build_game_state_manager(self) -> None:
-        self.game_state_manager = GameStateManager(GameQuitEventHandler(),
-                                                   CellClickedEventHandler(self.board,
-                                                                           self.display, self.auto_revealer))
+        self.game_state_manager = GameStateManager()
+
+    def build_event_manager(self) -> None:
+        cell_clicked_event = CellClickedEvent(self.board, self.display, self.auto_revealer, self.game_state_manager)
+        cell_flagged_event = CellFlaggedEvent(self.display, self.game_state_manager)
+        self.event_manager = EventManager(GameQuitEventHandler(self.game_state_manager),
+                                          ButtonClickedEventHandler(self.board, cell_clicked_event, cell_flagged_event))
 
     def build_game_loop(self) -> None:
-        self.game_loop = GameLoop(self.game_state_manager)
+        self.game_loop = GameLoop(self.event_manager, self.game_state_manager)

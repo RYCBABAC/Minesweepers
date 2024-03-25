@@ -21,4 +21,4 @@ class GameStateFinder:
 
     @staticmethod
     def did_user_win(board: List[Cell]) -> bool:
-        return not any(cell.is_revealed for cell in board)
+        return not any(not cell.is_revealed for cell in board if cell.value != CellValue.MINE)

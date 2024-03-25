@@ -1,13 +1,13 @@
 from entities.game_state import GameState
-from event_handling.game_state_manager import GameStateManager
+from event_handling.event_manager import EventManager
+from game_logic.game_state_manager import GameStateManager
 
 
 class GameLoop:
-    def __init__(self, game_state_manager: GameStateManager):
+    def __init__(self, event_manager: EventManager, game_state_manager: GameStateManager):
+        self.event_manager = event_manager
         self.game_state_manager = game_state_manager
 
     def run_game(self) -> None:
-        is_game_finished = False
-        while not is_game_finished:
-            game_current_states = self.game_state_manager.get_game_state()
-            is_game_finished = GameState.QUIT in game_current_states
+        while self.game_state_manager.game_state != GameState.QUIT:
+            self.event_manager.get_game_state()
