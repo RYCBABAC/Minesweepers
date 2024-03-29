@@ -14,9 +14,7 @@ class GameRunner:
 
     def run_game(self):
         with self.display:
-            self.setup_display()
+            self.display.update_cells(self.board)
             self.game_loop.run_game()
 
-    def setup_display(self):
-        self.display.set_background_color(constants.BACKGROUND_COLOR)
-        self.display.update_cells(self.board)
+

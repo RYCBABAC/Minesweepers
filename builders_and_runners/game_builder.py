@@ -17,6 +17,7 @@ from game_logic.game_state_manager import GameStateManager
 from game_logic.neighbors_accessor import NeighborsAccessor
 from user_interface.cell_image_mapper import CellImageMapper
 from user_interface.display import Display
+from user_interface.time_manager import TimeManager
 
 
 class GameBuilder:
@@ -28,6 +29,7 @@ class GameBuilder:
         self.event_manager: Optional[EventManager] = None
         self.auto_revealer: Optional[AutoRevealer] = None
         self.game_state_manager: Optional[GameStateManager] = None
+        self.time_manager: Optional[TimeManager] = None
 
     def build_game(self) -> GameRunner:
         self.build_neighbors_accessor()
@@ -36,6 +38,7 @@ class GameBuilder:
         self.build_auto_revealer()
         self.build_game_state_manager()
         self.build_event_manager()
+        self.build_time_manager()
         self.build_game_loop()
         return GameRunner(self.board, self.display, self.game_loop)
 
@@ -48,13 +51,17 @@ class GameBuilder:
                                   self.neighbors_accessor).create_board()
 
     def build_display(self) -> None:
-        self.display = Display(constants.DISPLAY_SIZE, CellImageMapper(constants.BASE_IMAGES_PATH))
+        self.display = Display(constants.DISPLAY_SIZE, CellImageMapper(constants.BASE_IMAGES_PATH),
+                               constants.BACKGROUND_COLOR)
 
     def build_auto_revealer(self) -> None:
         self.auto_revealer = AutoRevealer(self.neighbors_accessor)
 
     def build_game_state_manager(self) -> None:
         self.game_state_manager = GameStateManager()
+
+    def build_time_manager(self) -> None:
+        self.time_manager = TimeManager(self.display, self.game_state_manager)
 
     def build_event_manager(self) -> None:
         cell_clicked_event = CellClickedEvent(self.board, self.display, self.auto_revealer, self.game_state_manager)
@@ -63,4 +70,4 @@ class GameBuilder:
                                           ButtonClickedEventHandler(self.board, cell_clicked_event, cell_flagged_event))
 
     def build_game_loop(self) -> None:
-        self.game_loop = GameLoop(self.event_manager, self.game_state_manager)
+        self.game_loop = GameLoop(self.event_manager, self.game_state_manager, self.time_manager)
