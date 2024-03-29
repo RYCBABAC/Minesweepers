@@ -40,5 +40,5 @@ class CellClickedEvent:
             CellUpdater.update_cell(cell, CellUpdateType.LOST_REVEAL)
 
     def set_game_state(self) -> None:
-        did_user_win = not any(not cell.is_revealed for cell in self.board if cell.value == CellValue.MINE)
+        did_user_win = not any(not cell.is_revealed for cell in self.board if cell.value != CellValue.MINE)
         self.game_state_manager.game_state = GameState.USER_WON if did_user_win else GameState.ONGOING
