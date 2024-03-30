@@ -7,12 +7,14 @@ from entities.cell_image import CellImage
 
 
 class CellImageMapper:
-    def __init__(self, base_path: str):
-        self.base_path = base_path
+    BASE_IMAGES_PATH = "images"
+    IMAGES_EXTENSION = ".png"
+
+    def __init__(self):
         self.mapping = {image: self.load_image(image) for image in CellImage}
 
     def load_image(self, image: CellImage) -> Surface:
-        return pygame.image.load(os.path.join(self.base_path, image.value) + ".png")
+        return pygame.image.load(os.path.join(self.BASE_IMAGES_PATH, image.value) + self.IMAGES_EXTENSION)
 
     def __getitem__(self, image: CellImage) -> Surface:
         if image not in self.mapping:

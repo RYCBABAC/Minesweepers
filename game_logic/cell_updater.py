@@ -24,7 +24,7 @@ class CellUpdater:
             cell.image = CellImage.EMPTY
         else:
             cell.image = CellImage(f"grid{cell.value.value}")
-        cell.is_revealed = not cell.is_revealed
+        cell.is_revealed = True
 
     @staticmethod
     def lost_reveal_cell(cell: Cell) -> None:
@@ -38,7 +38,7 @@ class CellUpdater:
             cell.image = CellImage.EMPTY
         else:
             cell.image = CellImage(f"grid{cell.value.value}")
-        cell.is_revealed = not cell.is_revealed
+        cell.is_revealed = True
 
     @staticmethod
     def flag_cell(cell: Cell) -> None:
