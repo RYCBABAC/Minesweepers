@@ -20,24 +20,24 @@ class CellClickedEvent:
         if self.game_state_manager.game_state != GameState.ONGOING:
             return
 
+        CellUpdater.update_cell(cell, CellUpdateType.REVEAL)
         cells_to_reveal = self.get_revealed_cells(cell)
-        self.set_game_state()
+        self.game_state_manager.game_state = self.get_new_game_state(cell)
         self.display.update_cells(cells_to_reveal)
 
     def get_revealed_cells(self, cell: Cell) -> List[Cell]:
-        if cell.value == CellValue.MINE:
-            cell.is_revealed = True
-            self.game_lost_reveal()
-            self.game_state_manager.game_state = GameState.USER_LOST
-            return self.board.board
-
-        CellUpdater.update_cell(cell, CellUpdateType.REVEAL)
+        if self.did_user_lose(cell):
+            return self.board.reveal_all()
         return [cell] + self.board.reveal(cell)
 
-    def game_lost_reveal(self) -> None:
-        for cell in self.board.board:
-            CellUpdater.update_cell(cell, CellUpdateType.LOST_REVEAL)
+    def get_new_game_state(self, cell: Cell) -> GameState:
+        if self.did_user_lose(cell):
+            return GameState.USER_LOST
+        elif self.board.did_user_win():
+            return GameState.USER_WON
+        else:
+            return GameState.ONGOING
 
-    def set_game_state(self) -> None:
-        did_user_win = not any(not cell.is_revealed for cell in self.board.board if cell.value != CellValue.MINE)
-        self.game_state_manager.game_state = GameState.USER_WON if did_user_win else self.game_state_manager.game_state
+    @staticmethod
+    def did_user_lose(cell: Cell) -> bool:
+        return cell.value == CellValue.MINE

@@ -24,7 +24,7 @@ class Board:
         r = index // cols
         c = index % cols
         return [(r - i) * cols + c - j for i in range(-1, 2) for j in range(-1, 2)
-                if 0 <= r - i < rows and 0 <= c - j < cols and (r - i) * cols + c - j != 0]
+                if 0 <= r - i < rows and 0 <= c - j < cols and (r - i) * cols + c - j != index]
 
     def reveal(self, clicked_cell: Cell) -> List[Cell]:
         revealed_cells = self.get_neighbors_to_reveal(clicked_cell)
@@ -39,3 +39,11 @@ class Board:
         neighbors = self.get_neighbors(clicked_cell)
         return [neighbor for neighbor in neighbors
                 if neighbor.value != CellValue.MINE and not neighbor.is_flagged and not neighbor.is_revealed]
+
+    def did_user_win(self) -> bool:
+        return not any(not cell.is_revealed for cell in self.board if cell.value != CellValue.MINE)
+
+    def reveal_all(self) -> List[Cell]:
+        for cell in self.board:
+            CellUpdater.update_cell(cell, CellUpdateType.LOST_REVEAL)
+        return self.board

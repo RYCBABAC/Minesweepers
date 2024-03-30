@@ -1,9 +1,0 @@
-# Sizes
-
-
-
-
-# Others
-
-NUM_OF_RIGHT_NEIGHBORS = 4
-NUM_OF_LEFT_NEIGHBORS = 4

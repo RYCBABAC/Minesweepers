@@ -19,7 +19,7 @@ class CellUpdater:
         if cell.is_revealed or cell.is_flagged:
             return
         elif cell.value == CellValue.MINE:
-            cell.image = CellImage.MINE
+            cell.image = CellImage.MINE_CLICKED
         elif cell.value == CellValue.EMPTY:
             cell.image = CellImage.EMPTY
         else:
