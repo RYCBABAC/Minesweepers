@@ -1,16 +1,17 @@
+from typing import Dict
+
 import pygame
 
-from event_handling.button_clicked_event_handler import ButtonClickedEventHandler
-from event_handling.game_quit_event_handler import GameQuitEventHandler
+from event_handling.ievent_handler import IEventHandler
 
 
 class EventManager:
-    def __init__(self, game_quit_event_handler: GameQuitEventHandler,
-                 cell_clicked_event_handler: ButtonClickedEventHandler):
-        self.event_handlers = {
-            pygame.QUIT: game_quit_event_handler,
-            pygame.MOUSEBUTTONUP: cell_clicked_event_handler
-        }
+    def __init__(self):
+        self.event_handlers: Dict[int, IEventHandler] = {}
+
+    def subscribe_event(self, event_type: int, event_handler: IEventHandler):
+        if event_type not in self.event_handlers:
+            self.event_handlers[event_type] = event_handler
 
     def handle_events(self) -> None:
         for event in pygame.event.get():

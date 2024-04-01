@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Optional
 
 from entities.cell import Cell
 from entities.cell_value import CellValue
@@ -47,3 +47,9 @@ class Board:
         for cell in self.board:
             CellUpdater.update_cell(cell, CellUpdateType.LOST_REVEAL)
         return self.board
+
+    def get_cell_from_position(self, position: Tuple[int, int]) -> Optional[Cell]:
+        for cell in self.board:
+            if cell.rect.collidepoint(position):
+                return cell
+        return None

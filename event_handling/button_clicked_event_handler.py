@@ -1,34 +1,30 @@
-from typing import List, Tuple, Optional
+from typing import Tuple
 
 from pygame.event import Event
 
-from entities.cell import Cell
-from entities.game_state import GameState
 from event_handling.ievent_handler import IEventHandler
 from game_logic.board import Board
-from game_logic.cell_clicked_event import CellClickedEvent
-from game_logic.cell_flagged_event import CellFlaggedEvent
+from game_logic.board_event_manager import BoardEventManager
 
 
 class ButtonClickedEventHandler(IEventHandler):
-    def __init__(self, board: Board, cell_clicked_event: CellClickedEvent, cell_flagged_event: CellFlaggedEvent):
+    def __init__(self, board: Board, board_event_manager: BoardEventManager):
         self.board = board
-        self.cell_clicked_event = cell_clicked_event
-        self.cell_flagged_event = cell_flagged_event
+        self.board_event_manager = board_event_manager
 
-    def handle_event(self, event: Event) -> GameState:
-        cell = self.get_clicked_cell(event.pos)
-        if cell is None:
-            return GameState.ONGOING
-
+    def handle_event(self, event: Event) -> None:
         match event.button:
             case 1:  # Left click
-                self.cell_clicked_event.handle_cell_clicked_event(cell)
+                self.handle_left_click(event.pos)
             case 3:  # Right click
-                self.cell_flagged_event.handle_cell_flagged_event(cell)
+                self.handle_right_click(event.pos)
 
-    def get_clicked_cell(self, clicked_pos: Tuple[int, int]) -> Optional[Cell]:
-        for cell in self.board.board:
-            if cell.rect.collidepoint(clicked_pos):
-                return cell
-        return None
+    def handle_left_click(self, clicked_position: Tuple[int, int]) -> None:
+        cell = self.board.get_cell_from_position(clicked_position)
+        if cell is not None:
+            self.board_event_manager.handle_cell_clicked_event(cell)
+
+    def handle_right_click(self, clicked_position: Tuple[int, int]) -> None:
+        cell = self.board.get_cell_from_position(clicked_position)
+        if cell is not None:
+            self.board_event_manager.handle_cell_flagged_event(cell)

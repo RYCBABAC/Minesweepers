@@ -10,7 +10,7 @@ from game_logic.game_state_manager import GameStateManager
 from user_interface.display import Display
 
 
-class CellClickedEvent:
+class BoardEventManager:
     def __init__(self, board: Board, display: Display, game_state_manager: GameStateManager):
         self.board = board
         self.display = display
@@ -24,6 +24,13 @@ class CellClickedEvent:
         cells_to_reveal = self.get_revealed_cells(cell)
         self.game_state_manager.game_state = self.get_new_game_state(cell)
         self.display.update_cells(cells_to_reveal)
+
+    def handle_cell_flagged_event(self, cell: Cell) -> None:
+        if self.game_state_manager.game_state != GameState.ONGOING or cell.is_revealed:
+            return
+
+        CellUpdater.update_cell(cell, CellUpdateType.FLAG)
+        self.display.update_cells([cell])
 
     def get_revealed_cells(self, cell: Cell) -> List[Cell]:
         if self.did_user_lose(cell):
