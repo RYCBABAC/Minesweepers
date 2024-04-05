@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class CellImage(Enum):
+class GridImage(Enum):
     EMPTY = "empty"
     FLAG = "flag"
     CELL = "grid"

@@ -3,21 +3,21 @@ from typing import Optional, List
 import pygame
 from pygame import Surface
 
-from entities.cell import Cell
-from entities.text import Text
 from game_logic.board import Board
-from user_interface.cell_image_mapper import CellImageMapper
+from user_interface.entities.grid import Grid
+from user_interface.entities.text import Text
+from user_interface.resource_managers.grid_image_mapper import GridImageMapper
 
 
 class Display:
     BACKGROUND_COLOR = (192, 192, 192)
     HORIZONTAL_BORDER_SIZE = (16, 16)
     VERTICAL_BORDER_SIZE = (100, 16)
-    DISPLAY_SIZE = (Board.BOARD_SIZE[0] * Cell.CELL_SIZE[0] + HORIZONTAL_BORDER_SIZE[0] + HORIZONTAL_BORDER_SIZE[1],
-                    Board.BOARD_SIZE[1] * Cell.CELL_SIZE[1] + VERTICAL_BORDER_SIZE[0] + VERTICAL_BORDER_SIZE[1])
+    DISPLAY_SIZE = (Board.BOARD_SIZE[0] * Grid.CELL_SIZE[0] + HORIZONTAL_BORDER_SIZE[0] + HORIZONTAL_BORDER_SIZE[1],
+                    Board.BOARD_SIZE[1] * Grid.CELL_SIZE[1] + VERTICAL_BORDER_SIZE[0] + VERTICAL_BORDER_SIZE[1])
 
-    def __init__(self, cell_image_mapper: CellImageMapper):
-        self.cell_image_mapper = cell_image_mapper
+    def __init__(self, grid_image_mapper: GridImageMapper):
+        self.grid_image_mapper = grid_image_mapper
         self._display: Optional[Surface] = None
 
     @property
@@ -33,10 +33,10 @@ class Display:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pygame.quit()
 
-    def update_cells(self, cells: List[Cell]) -> None:
-        for cell in cells:
-            image = self.cell_image_mapper[cell.image]
-            self.display.blit(image, cell.rect)
+    def update_grids(self, grids: List[Grid]) -> None:
+        for grid in grids:
+            image = self.grid_image_mapper[grid.image]
+            self.display.blit(image, grid.rect)
 
     def update_text(self, text: Text) -> None:
         text_content_surface = (pygame.font.SysFont(text.font, text.size)

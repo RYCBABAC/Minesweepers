@@ -1,12 +1,12 @@
-from typing import Tuple, Optional
+from typing import Optional
 
 import pygame
 from pygame.time import Clock
 
 from entities.game_state import GameState
-from entities.text import Text
+from user_interface.entities.text import Text
 from game_logic.game_state_manager import GameStateManager
-from user_interface.display import Display
+from user_interface.drawers.display import Display
 
 
 class TimeManager:

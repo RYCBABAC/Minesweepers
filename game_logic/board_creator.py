@@ -1,10 +1,9 @@
 import random
 from typing import List
 
-from entities.cell import Cell
-from entities.cell_value import CellValue
+from game_logic.entities.cell import Cell
+from game_logic.entities.cell_value import CellValue
 from game_logic.board import Board
-from game_logic.cell_creator import CellCreator
 
 
 class BoardCreator:
@@ -17,7 +16,11 @@ class BoardCreator:
     @staticmethod
     def create_empty_board() -> Board:
         board_size = Board.BOARD_SIZE[0] * Board.BOARD_SIZE[1]
-        return Board([CellCreator.create_cell(index) for index in range(0, board_size)])
+        return Board([BoardCreator.create_cell(index) for index in range(0, board_size)])
+
+    @staticmethod
+    def create_cell(index: int) -> Cell:
+        return Cell(index=index, value=CellValue.EMPTY, is_revealed=False, is_flagged=False)
 
     @staticmethod
     def initialize_board(board: Board) -> None:

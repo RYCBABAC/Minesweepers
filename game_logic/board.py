@@ -1,9 +1,8 @@
-from typing import List, Tuple, Optional
+from typing import List
 
-from entities.cell import Cell
-from entities.cell_value import CellValue
-from entities.update_type import CellUpdateType
-from game_logic.cell_updater import CellUpdater
+from game_logic.entities.cell import Cell
+from game_logic.entities.cell_value import CellValue
+from game_logic.entities.game_state import GameState
 
 
 class Board:
@@ -12,6 +11,8 @@ class Board:
 
     def __init__(self, board: List[Cell]):
         self.board = board
+        self.num_of_valid_reveals = 0
+        self.is_mine_clicked = False
 
     def get_neighbors(self, cell: Cell) -> List[Cell]:
         index = cell.index
@@ -26,12 +27,47 @@ class Board:
         return [(r - i) * cols + c - j for i in range(-1, 2) for j in range(-1, 2)
                 if 0 <= r - i < rows and 0 <= c - j < cols and (r - i) * cols + c - j != index]
 
-    def reveal(self, clicked_cell: Cell) -> List[Cell]:
-        revealed_cells = self.get_neighbors_to_reveal(clicked_cell)
+    def flag_cell(self, flagged_cell: Cell) -> List[Cell]:
+        if not self.should_flag(flagged_cell):
+            return []
+
+        flagged_cell.is_flagged = not flagged_cell.is_flagged
+        return [flagged_cell]
+
+    def should_flag(self, cell: Cell) -> bool:
+        return self.get_game_state() == GameState.ONGOING and not cell.is_revealed
+
+    def click_cell(self, clicked_cell: Cell) -> List[Cell]:
+        if not self.should_reveal(clicked_cell):
+            return []
+        elif clicked_cell.value == CellValue.MINE:
+            return self.user_lost_reveal(clicked_cell)
+        else:
+            return self.reveal(clicked_cell)
+
+    def should_reveal(self, cell: Cell) -> bool:
+        return self.get_game_state() == GameState.ONGOING and not cell.is_flagged
+
+    def user_lost_reveal(self, cell: Cell) -> List[Cell]:
+        cell.is_revealed = True
+        self.is_mine_clicked = True
+        return self.board
+
+    def reveal(self, cell: Cell) -> List[Cell]:
+        cell.is_revealed = True
+        self.num_of_valid_reveals += 1
+        revealed_cells = self.get_neighbors_to_reveal(cell)
         for cell in revealed_cells:
-            CellUpdater.update_cell(cell, CellUpdateType.REVEAL)
             revealed_cells += self.reveal(cell)
-        return revealed_cells
+        return revealed_cells + [cell]
+
+    def get_game_state(self) -> GameState:
+        if self.is_mine_clicked:
+            return GameState.USER_LOST
+        elif self.num_of_valid_reveals == self.BOARD_SIZE[0] * self.BOARD_SIZE[1] - self.NUM_OF_MINES:
+            return GameState.USER_WON
+        else:
+            return GameState.ONGOING
 
     def get_neighbors_to_reveal(self, clicked_cell: Cell) -> List[Cell]:
         if clicked_cell.value != CellValue.EMPTY:
@@ -39,17 +75,3 @@ class Board:
         neighbors = self.get_neighbors(clicked_cell)
         return [neighbor for neighbor in neighbors
                 if neighbor.value != CellValue.MINE and not neighbor.is_flagged and not neighbor.is_revealed]
-
-    def did_user_win(self) -> bool:
-        return not any(not cell.is_revealed for cell in self.board if cell.value != CellValue.MINE)
-
-    def reveal_all(self) -> List[Cell]:
-        for cell in self.board:
-            CellUpdater.update_cell(cell, CellUpdateType.LOST_REVEAL)
-        return self.board
-
-    def get_cell_from_position(self, position: Tuple[int, int]) -> Optional[Cell]:
-        for cell in self.board:
-            if cell.rect.collidepoint(position):
-                return cell
-        return None
