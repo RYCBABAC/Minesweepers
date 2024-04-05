@@ -18,9 +18,7 @@ class UILogicAccessor:
         clicked_index = grid.index
         cell = self.board.board[clicked_index]
         revealed_cells = self.board.click_cell(cell)
-        print("Got revealed_cells")
         game_state = self.get_ui_game_state(self.board.get_game_state())
-        print("Got game state")
         return [self.get_updated_grid(revealed_cell, game_state)
                 for revealed_cell in revealed_cells], game_state
 

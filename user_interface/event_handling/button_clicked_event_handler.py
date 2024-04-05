@@ -39,7 +39,5 @@ class ButtonClickedEventHandler(IEventHandler):
 
     def handle_table_click(self, get_changed_grids: GetChangedGridsMethodType, clicked_grid: Grid) -> UIGameState:
         changed_grids, next_game_state = get_changed_grids(clicked_grid)
-        print("Got revealed grids")
         self.display.update_grids(changed_grids)
-        print("Updated display")
         return next_game_state

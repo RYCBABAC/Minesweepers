@@ -54,6 +54,8 @@ class Board:
         return self.board
 
     def reveal(self, cell: Cell) -> List[Cell]:
+        if cell.is_revealed:
+            return []
         cell.is_revealed = True
         self.num_of_valid_reveals += 1
         revealed_cells = self.get_neighbors_to_reveal(cell)
