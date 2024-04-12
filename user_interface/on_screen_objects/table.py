@@ -19,11 +19,9 @@ class Table:
         return dist_from_start <= pos[0] <= dist_from_end and dist_from_top <= pos[1] <= dist_from_bottom
 
     def get_grid_from_position(self, position: Tuple[int, int]) -> Grid:
-        rows = self.TABLE_SIZE[0]
-        cols = self.TABLE_SIZE[1]
         left_border = Display.HORIZONTAL_BORDER_SIZE[0]
         top_border = Display.VERTICAL_BORDER_SIZE[0]
-        row = (position[1] - top_border) // rows
-        col = (position[0] - left_border) // cols
-        index = row * cols + col
+        row = (position[1] - top_border) // Grid.GRID_SIZE[1]
+        col = (position[0] - left_border) // Grid.GRID_SIZE[0]
+        index = row * self.TABLE_SIZE[1] + col
         return self.table[index]
