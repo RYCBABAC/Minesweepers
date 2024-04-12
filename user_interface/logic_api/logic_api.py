@@ -58,6 +58,15 @@ class LogicApi:
     def get_num_of_mines(self) -> int:
         return self.board.NUM_OF_MINES
 
+    def get_game_state_text(self) -> str:
+        match self.board.get_game_state():
+            case GameState.ONGOING:
+                return "Game ongoing"
+            case GameState.USER_WON:
+                return "You won!"
+            case GameState.USER_LOST:
+                return "You lost!"
+
     def __table_click_api(self, grid: Grid, api_action: TableClickApiType, image_getter: ImageGetterType) -> List[Grid]:
         clicked_cell = self.board.board[grid.index]
         revealed_cells = api_action(clicked_cell)
