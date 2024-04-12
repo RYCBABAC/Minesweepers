@@ -1,5 +1,4 @@
 from user_interface.drawers.display import Display
-from user_interface.entities.ui_game_state import UIGameState
 from user_interface.event_handling.event_manager import EventManager
 from user_interface.on_screen_objects.table import Table
 
@@ -12,12 +11,13 @@ class UIRunner:
 
     def run_game(self):
         with self.display:
-            self.display.update_grids(self.table.table)
+            self.initialize_game()
             self.game_loop()
 
+    def initialize_game(self) -> None:
+        self.display.update_display(self.table.table)
+
     def game_loop(self):
-        should_stop = False
-        while not should_stop:
-            game_states = self.event_manager.handle_events()
-            should_stop = UIGameState.QUIT in game_states
+        while self.display.is_game_running:
+            self.event_manager.handle_events()
             self.display.update_frame()
