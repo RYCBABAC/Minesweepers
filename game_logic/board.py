@@ -58,10 +58,19 @@ class Board:
             return []
         cell.is_revealed = True
         self.num_of_valid_reveals += 1
-        revealed_cells = self.get_neighbors_to_reveal(cell)
-        for cell in revealed_cells:
-            revealed_cells += self.reveal(cell)
+        if cell.value != CellValue.EMPTY:
+            return [cell]
+
+        neighbors = self.get_neighbors(cell)
+        revealed_cells = []
+        for neighbor in neighbors:
+            if self.should_reveal_neighbor(neighbor):
+                revealed_cells += self.reveal(neighbor)
         return revealed_cells + [cell]
+
+    @staticmethod
+    def should_reveal_neighbor(cell) -> bool:
+        return cell.value != CellValue.MINE and not cell.is_flagged and not cell.is_revealed
 
     def get_game_state(self) -> GameState:
         if self.is_mine_clicked:
@@ -70,10 +79,3 @@ class Board:
             return GameState.USER_WON
         else:
             return GameState.ONGOING
-
-    def get_neighbors_to_reveal(self, clicked_cell: Cell) -> List[Cell]:
-        if clicked_cell.value != CellValue.EMPTY:
-            return []
-        neighbors = self.get_neighbors(clicked_cell)
-        return [neighbor for neighbor in neighbors
-                if neighbor.value != CellValue.MINE and not neighbor.is_flagged and not neighbor.is_revealed]
