@@ -55,6 +55,9 @@ class LogicApi:
     def is_game_locked(self) -> bool:
         return self.board.get_game_state() != GameState.ONGOING
 
+    def get_num_of_mines(self) -> int:
+        return self.board.NUM_OF_MINES
+
     def __table_click_api(self, grid: Grid, api_action: TableClickApiType, image_getter: ImageGetterType) -> List[Grid]:
         clicked_cell = self.board.board[grid.index]
         revealed_cells = api_action(clicked_cell)
