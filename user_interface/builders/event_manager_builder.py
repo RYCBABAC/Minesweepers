@@ -10,8 +10,7 @@ from user_interface.on_screen_objects.table import Table
 
 class EventManagerBuilder:
     @staticmethod
-    def build_event_manager(table: Table, display: Display,
-                            logic_api) -> EventManager:
+    def build_event_manager(table: Table, display: Display, logic_api) -> EventManager:
         event_manager = EventManager()
         event_manager.subscribe_event(EventType.QUIT, GameQuitEvent(display))
         event_manager.subscribe_event(EventType.GRID_CLICKED, GridClickedEvent(display, table, logic_api))
