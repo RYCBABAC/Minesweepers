@@ -1,4 +1,4 @@
-from typing import List, Callable, Tuple, Optional
+from typing import List, Callable
 
 from game_logic.board import Board
 from game_logic.entities.cell import Cell
@@ -51,6 +51,9 @@ class LogicApi:
 
     def flag_grid(self, flagged_grid: Grid) -> List[Grid]:
         return self.__table_click_api(flagged_grid, self.board.flag_cell, get_flagged_grid_image)
+
+    def is_game_locked(self) -> bool:
+        return self.board.get_game_state() != GameState.ONGOING
 
     def __table_click_api(self, grid: Grid, api_action: TableClickApiType, image_getter: ImageGetterType) -> List[Grid]:
         clicked_cell = self.board.board[grid.index]

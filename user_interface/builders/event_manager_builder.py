@@ -1,4 +1,3 @@
-from user_interface.drawables.text import Text
 from user_interface.drawers.display import Display
 from user_interface.entities.event_type import EventType
 from user_interface.event_handling.event_handlers.game_quit_event import GameQuitEvent
@@ -17,5 +16,5 @@ class EventManagerBuilder:
         event_manager.subscribe_event(EventType.QUIT, GameQuitEvent(display))
         event_manager.subscribe_event(EventType.GRID_CLICKED, GridClickedEvent(display, table, logic_api))
         event_manager.subscribe_event(EventType.GRID_FLAGGED, GridFlaggedEvent(display, table, logic_api))
-        event_manager.subscribe_event(EventType.TIME_EVENT, TimeEvent(display))
+        event_manager.subscribe_event(EventType.TIME_EVENT, TimeEvent(display, logic_api))
         return event_manager

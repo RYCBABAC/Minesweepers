@@ -8,11 +8,13 @@ from user_interface.drawables.drawable import Drawable
 from user_interface.drawables.text import Text
 from user_interface.drawers.display import Display
 from user_interface.event_handling.event_handler import EventHandler
+from user_interface.logic_api.logic_api import LogicApi
 
 
 class TimeEvent(EventHandler):
-    def __init__(self, display: Display):
+    def __init__(self, display: Display, logic_api: LogicApi):
         super().__init__(display)
+        self.logic_api = logic_api
         self.timer: Optional[Clock] = None
         self.current_time = 0
         self.time_text = Text(
@@ -24,6 +26,9 @@ class TimeEvent(EventHandler):
             position=(0, 0))
 
     def process_event(self, event: Event) -> List[Drawable]:
+        if self.logic_api.is_game_locked():
+            return []
+
         if self.timer is None:
             self.timer = pygame.time.Clock()
 
