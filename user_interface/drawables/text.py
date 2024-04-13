@@ -18,15 +18,10 @@ class Text(Drawable):
 
     @property
     def surface(self) -> Surface:
-        text_surface = self.create_text_surface()
-        return self.add_background_to_text_surface(text_surface)
+        surface = Surface(self.rect.size)
+        surface.fill(Display.BACKGROUND_COLOR)
+        text = pygame.font.SysFont(self.font, self.size).render(self.content, self.anti_alias, self.color)
+        surface.blit(text, dest=(0, 0))
+        self.rect.size = text.get_size()
+        return surface
 
-    def create_text_surface(self) -> Surface:
-        return pygame.font.SysFont(self.font, self.size).render(self.content, self.anti_alias, self.color)
-
-    def add_background_to_text_surface(self, text_surface: Surface) -> Surface:
-        text_surface_with_background = Surface(text_surface.get_size())
-        text_surface_with_background.fill(Display.BACKGROUND_COLOR)
-        text_surface_with_background.blit(text_surface, (0, 0))
-        self.rect.size = text_surface_with_background.get_size()
-        return text_surface_with_background
