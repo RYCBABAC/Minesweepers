@@ -6,7 +6,6 @@ from pygame import Surface
 from game_logic.board import Board
 from user_interface.drawables.drawable import Drawable
 from user_interface.drawables.grid import Grid
-from user_interface.resource_managers.grid_image_mapper import GridImageMapper
 
 
 class Display:
@@ -16,8 +15,7 @@ class Display:
     DISPLAY_SIZE = (Board.BOARD_SIZE[0] * Grid.GRID_SIZE[0] + HORIZONTAL_BORDER_SIZE[0] + HORIZONTAL_BORDER_SIZE[1],
                     Board.BOARD_SIZE[1] * Grid.GRID_SIZE[1] + VERTICAL_BORDER_SIZE[0] + VERTICAL_BORDER_SIZE[1])
 
-    def __init__(self, grid_image_mapper: GridImageMapper):
-        self.grid_image_mapper = grid_image_mapper
+    def __init__(self):
         self._display: Optional[Surface] = None
         self.is_game_running = False
 
