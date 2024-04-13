@@ -15,6 +15,6 @@ class Grid(Drawable):
     image: GridImage
     rect: Rect
 
-    def draw(self, surface: Surface) -> None:
-        surface_image = get_grid_image(self.image)
-        surface.blit(surface_image, self.rect)
+    @property
+    def surface(self) -> Surface:
+        return get_grid_image(self.image)

@@ -1,5 +1,6 @@
 from typing import List
 
+from pygame import Rect
 from pygame.event import Event
 
 from user_interface.drawables.drawable import Drawable
@@ -22,7 +23,7 @@ class GridFlaggedEvent(EventHandler):
             content=str(logic_api.get_num_of_mines()),
             anti_alias=True,
             color=(0, 0, 0),
-            position=(Display.DISPLAY_SIZE[0] - Display.HORIZONTAL_BORDER_SIZE[1] - 50, 0))
+            rect=Rect(Display.DISPLAY_SIZE[0] - Display.HORIZONTAL_BORDER_SIZE[1] - 50, 0, 50, 50))
 
     def process_event(self, event: Event) -> List[Drawable]:
         flagged_position = event.pos

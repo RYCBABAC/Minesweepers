@@ -1,5 +1,6 @@
 from typing import List
 
+from pygame import Rect
 from pygame.event import Event
 
 from user_interface.drawables.drawable import Drawable
@@ -21,7 +22,7 @@ class GridClickedEvent(EventHandler):
             content=self.logic_api.get_game_state_text(),
             anti_alias=True,
             color=(0, 0, 0),
-            position=(65, 0))
+            rect=Rect((0, 65), (0, 0)))
 
     def process_event(self, event: Event) -> List[Drawable]:
         clicked_position = event.pos

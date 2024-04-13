@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 import pygame
+from pygame import Rect
 from pygame.event import Event
 from pygame.time import Clock
 
@@ -23,7 +24,7 @@ class TimeEvent(EventHandler):
             content="",
             anti_alias=True,
             color=(0, 0, 0),
-            position=(0, 0))
+            rect=Rect(0, 0, 50, 50))
 
     def process_event(self, event: Event) -> List[Drawable]:
         if self.logic_api.is_game_locked():
