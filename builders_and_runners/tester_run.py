@@ -49,8 +49,6 @@ def main():
         row = Row(rect, grids)
         row.draw(display)
 
-    pygame.init()
-    display = pygame.display.set_mode((total_width, total_height))
     pygame.display.update()
     stop = False
     while not stop:
